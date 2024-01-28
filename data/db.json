@@ -1,0 +1,33 @@
+{
+  "pessoa": [
+    {
+      "id": 1,
+      "nome": "Carlos Silva Lima"
+    },
+    {
+      "id": 2,
+      "nome": "Carlito Ramos Junior"
+    },
+    {
+      "id": 3,
+      "nome": "Paulo Felipe Castro"
+    }
+  ],
+  "pessoa-info": [
+    {
+      "pessoa": 1,
+      "telefone": "85 988116655",
+      "email": "teste1@email.com"
+    },
+    {
+      "pessoa": 2,
+      "telefone": "85 988224433",
+      "email": "teste2@email.com"
+    },
+    {
+      "pessoa": 3,
+      "telefone": "85 988332211",
+      "email": "teste3@email.com"
+    }
+  ]
+}
