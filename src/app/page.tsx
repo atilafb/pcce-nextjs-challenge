@@ -1,11 +1,11 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import { Box } from "@mui/material";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
+    <Box p={2}>
       <h1>PCCE NEXTJS CHALLENGE</h1>
       <p>Begin of Form Challenge Project</p>
-    </main>
+    </Box>
   );
 }
