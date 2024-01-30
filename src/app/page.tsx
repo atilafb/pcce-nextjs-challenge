@@ -1,42 +1,65 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { AsyncAutocomplete } from "./components/AsyncAutocomplete";
 
 export default function Home() {
-  // o name do controller define direitinho o retorno aqui
   const { handleSubmit, control, watch } = useForm<{
-    carMaker: string;
-    carModel: string;
+    pessoa: string;
   }>();
+  const [pessoasList, setPessoasList] = useState<
+    | null
+    | {
+        id: number;
+        nome: string;
+      }[]
+  >(null);
+  const pessoa = watch("pessoa");
 
-  const options = [
-    { id: "1", label: "Option 1" },
-    { id: "2", label: "Option 2" },
-  ];
+  const personListRequest = async () => {
+    let pessoasListData = await fetch("http://localhost:8000/pessoa");
+    let pessoasListJson = await pessoasListData.json();
+    return pessoasListJson;
+  };
+
+  const personDataRequest = async () => {
+    let pessoaData = await fetch(`http://localhost:8000/pessoa-info/${pessoa}`);
+    let pessoaDataJson = await pessoaData.json();
+    return pessoaDataJson;
+  };
+
+  useEffect(() => {
+    personListRequest().then((response) => {
+      const mappedResponse = response.map(
+        (data: { id: number; nome: string }) => {
+          return {
+            id: data.id,
+            nome: data.nome,
+          };
+        }
+      );
+      setPessoasList(mappedResponse);
+    });
+  }, []);
+
+  const onSubmit = () => {
+    personDataRequest().then((response) => {
+      console.log(response.info);
+    });
+  };
 
   return (
     <Box p={2}>
       <h1>PCCE NEXTJS CHALLENGE</h1>
-      <form
-        onSubmit={handleSubmit((data) => {
-          console.log("Form data submitted", data);
-        })}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Box>
-          <Box>{watch("carMaker")}</Box>
           <AsyncAutocomplete
             control={control}
-            name={"carMaker"}
-            options={options}
+            name={"pessoa"}
+            options={pessoasList ?? []}
           />
           <br />
-          <AsyncAutocomplete
-            control={control}
-            name={"carModel"}
-            options={options}
-          />
         </Box>
         <Button variant="contained" type="submit">
           Enviar
