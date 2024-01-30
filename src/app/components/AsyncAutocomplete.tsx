@@ -4,7 +4,7 @@ import { Autocomplete, TextField } from "@mui/material";
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
 
 type AsyncAutocompleteProps<
-  O extends { id: string; label: string },
+  O extends { id: number; nome: string },
   TField extends FieldValues
 > = {
   control: Control<TField>;
@@ -13,7 +13,7 @@ type AsyncAutocompleteProps<
 };
 
 export function AsyncAutocomplete<
-  O extends { id: string; label: string },
+  O extends { id: number; nome: string },
   TField extends FieldValues
 >(props: AsyncAutocompleteProps<O, TField>) {
   const { control, options, name } = props;
@@ -33,7 +33,7 @@ export function AsyncAutocomplete<
                 : null
             }
             getOptionLabel={(option) => {
-              return option.label;
+              return option.nome;
             }}
             onChange={(event: any, newValue) => {
               onChange(newValue ? newValue.id : null);
