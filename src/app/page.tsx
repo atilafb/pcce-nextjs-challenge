@@ -9,12 +9,14 @@ export default function Home() {
     pessoa: string;
   }>();
   const [pessoasList, setPessoasList] = useState<
-    | null
     | {
         id: number;
         nome: string;
       }[]
-  >(null);
+  >([]);
+  const [openAutocomplete, setOpenAutocomplete] = useState(false);
+  const loading = openAutocomplete && pessoasList.length === 0;
+
   const pessoa = watch("pessoa");
 
   const personListRequest = async () => {
@@ -30,18 +32,20 @@ export default function Home() {
   };
 
   useEffect(() => {
-    personListRequest().then((response) => {
-      const mappedResponse = response.map(
-        (data: { id: number; nome: string }) => {
-          return {
-            id: data.id,
-            nome: data.nome,
-          };
-        }
-      );
-      setPessoasList(mappedResponse);
-    });
-  }, []);
+    if (openAutocomplete) {
+      personListRequest().then((response) => {
+        const mappedResponse = response.map(
+          (data: { id: number; nome: string }) => {
+            return {
+              id: data.id,
+              nome: data.nome,
+            };
+          }
+        );
+        setPessoasList(mappedResponse);
+      });
+    }
+  }, [openAutocomplete]);
 
   const onSubmit = () => {
     personDataRequest().then((response) => {
@@ -58,6 +62,9 @@ export default function Home() {
             control={control}
             name={"pessoa"}
             options={pessoasList ?? []}
+            setOpen={setOpenAutocomplete}
+            open={openAutocomplete}
+            loading={loading}
           />
           <br />
         </Box>

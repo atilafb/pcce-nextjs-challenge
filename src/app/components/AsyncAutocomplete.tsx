@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
 
 type AsyncAutocompleteProps<
@@ -10,13 +10,16 @@ type AsyncAutocompleteProps<
   control: Control<TField>;
   name: Path<TField>;
   options: O[];
+  setOpen: (value: boolean) => void;
+  open: boolean;
+  loading: boolean;
 };
 
 export function AsyncAutocomplete<
   O extends { id: number; nome: string },
   TField extends FieldValues
 >(props: AsyncAutocompleteProps<O, TField>) {
-  const { control, options, name } = props;
+  const { control, options, name, setOpen, open, loading } = props;
   return (
     <Controller
       name={name}
@@ -25,6 +28,13 @@ export function AsyncAutocomplete<
         const { onChange, value } = field;
         return (
           <Autocomplete
+            open={open}
+            onOpen={() => {
+              setOpen(true);
+            }}
+            onClose={() => {
+              setOpen(false);
+            }}
             value={
               value
                 ? options.find((option) => {
@@ -39,7 +49,24 @@ export function AsyncAutocomplete<
               onChange(newValue ? newValue.id : null);
             }}
             options={options}
-            renderInput={(params) => <TextField {...params} label="Opcoes" />}
+            loading={loading}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Opcoes"
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <React.Fragment>
+                      {loading ? (
+                        <CircularProgress color="inherit" size={20} />
+                      ) : null}
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
+                }}
+              />
+            )}
             sx={{ width: 300 }}
           />
         );
