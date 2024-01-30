@@ -12,7 +12,7 @@ let theme = createTheme({
       contrastText: "#fff",
     },
     text: {
-      primary: "#fff",
+      primary: "#212427",
       secondary: "#818f98",
     },
     common: {
