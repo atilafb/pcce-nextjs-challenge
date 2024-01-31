@@ -3,11 +3,27 @@ import React, { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { AsyncAutocomplete } from "./components/AsyncAutocomplete";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  pessoa: z.string({
+    required_error: "Uma pessoa deve ser selecionada",
+    invalid_type_error: "Uma pessoa deve ser selecionada",
+  }),
+});
+
+type PessoaSchema = z.infer<typeof schema>;
 
 export default function Home() {
-  const { handleSubmit, control, watch } = useForm<{
-    pessoa: string;
-  }>();
+  const {
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<{
+    pessoa: PessoaSchema;
+  }>({ resolver: zodResolver(schema) });
   const [pessoasList, setPessoasList] = useState<
     | {
         id: number;
