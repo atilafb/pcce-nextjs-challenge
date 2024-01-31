@@ -24,8 +24,8 @@ export function AsyncAutocomplete<
     <Controller
       name={name}
       control={control}
-      render={({ field }) => {
-        const { onChange, value } = field;
+      render={({ field, fieldState: { error } }) => {
+        const { onChange, value, ref } = field;
         return (
           <Autocomplete
             open={open}
@@ -51,21 +51,27 @@ export function AsyncAutocomplete<
             options={options}
             loading={loading}
             renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Opcoes"
-                InputProps={{
-                  ...params.InputProps,
-                  endAdornment: (
-                    <React.Fragment>
-                      {loading ? (
-                        <CircularProgress color="inherit" size={20} />
-                      ) : null}
-                      {params.InputProps.endAdornment}
-                    </React.Fragment>
-                  ),
-                }}
-              />
+              <React.Fragment>
+                <TextField
+                  {...params}
+                  label="Opcoes"
+                  inputRef={ref}
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <React.Fragment>
+                        {loading ? (
+                          <CircularProgress color="inherit" size={20} />
+                        ) : null}
+                        {params.InputProps.endAdornment}
+                      </React.Fragment>
+                    ),
+                  }}
+                />
+                {error ? (
+                  <span style={{ color: "red" }}>{error.message}</span>
+                ) : null}
+              </React.Fragment>
             )}
             sx={{ width: 300 }}
           />
