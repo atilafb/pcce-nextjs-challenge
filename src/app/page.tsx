@@ -1,6 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Box, Button } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Paper,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import { AsyncAutocomplete } from "./components/AsyncAutocomplete";
 import * as z from "zod";
@@ -70,24 +78,34 @@ export default function Home() {
   };
 
   return (
-    <Box p={2}>
-      <h1>PCCE NEXTJS CHALLENGE</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Box>
-          <AsyncAutocomplete
-            control={control}
-            name={"pessoa"}
-            options={pessoasList ?? []}
-            setOpen={setOpenAutocomplete}
-            open={openAutocomplete}
-            loading={loading}
-          />
-          <br />
-        </Box>
-        <Button variant="contained" type="submit">
-          Enviar
-        </Button>
-      </form>
+    <Box sx={{ backgroundColor: "#f0f0f0", minHeight: "100vh" }}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6">PCCE NextJS Challenge</Typography>
+        </Toolbar>
+      </AppBar>
+      <Container component="main" sx={{ marginTop: 2 }}>
+        <Paper elevation={3} sx={{ padding: 4, borderRadius: 8, boxShadow: 3 }}>
+          <Typography variant="h5" align="center" gutterBottom>
+            Autocomplete Load on Open with React-Hook-Form
+          </Typography>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Box mb={2}>
+              <AsyncAutocomplete
+                control={control}
+                name={"pessoa"}
+                options={pessoasList ?? []}
+                setOpen={setOpenAutocomplete}
+                open={openAutocomplete}
+                loading={loading}
+              />
+            </Box>
+            <Button variant="contained" type="submit">
+              Enviar
+            </Button>
+          </form>
+        </Paper>
+      </Container>
     </Box>
   );
 }
