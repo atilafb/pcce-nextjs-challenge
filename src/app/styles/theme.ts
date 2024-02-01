@@ -13,11 +13,7 @@ let theme = createTheme({
     },
     text: {
       primary: "#212427",
-      secondary: "#818f98",
-    },
-    common: {
-      black: "#212427",
-      white: "#ffffff",
+      secondary: "#fff",
     },
   },
 });
