@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Box,
@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { AsyncAutocomplete } from "./components/AsyncAutocomplete";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAsyncRequest } from "./hooks/useAsyncRequest";
 
 const schema = z.object({
   pessoa: z.string({
@@ -32,49 +33,26 @@ export default function Home() {
   } = useForm<{
     pessoa: PessoaSchema;
   }>({ resolver: zodResolver(schema) });
-  const [pessoasList, setPessoasList] = useState<
-    | {
-        id: number;
-        nome: string;
-      }[]
-  >([]);
-  const [openAutocomplete, setOpenAutocomplete] = useState(false);
-  const loading = openAutocomplete && pessoasList.length === 0;
-
   const pessoa = watch("pessoa");
-
-  const personListRequest = async () => {
-    let pessoasListData = await fetch("http://localhost:8000/pessoa");
-    let pessoasListJson = await pessoasListData.json();
-    return pessoasListJson;
-  };
-
+  
+  const [openAutocomplete, setOpenAutocomplete] = useState(false);
+  const { data: pessoasList, loading: loadingPessoas } = useAsyncRequest(
+    "http://localhost:8000/pessoa",
+    openAutocomplete
+  );
   const personDataRequest = async () => {
     let pessoaData = await fetch(`http://localhost:8000/pessoa-info/${pessoa}`);
     let pessoaDataJson = await pessoaData.json();
     return pessoaDataJson;
   };
 
-  useEffect(() => {
-    if (openAutocomplete) {
-      personListRequest().then((response) => {
-        const mappedResponse = response.map(
-          (data: { id: number; nome: string }) => {
-            return {
-              id: data.id,
-              nome: data.nome,
-            };
-          }
-        );
-        setPessoasList(mappedResponse);
-      });
-    }
-  }, [openAutocomplete]);
-
-  const onSubmit = () => {
-    personDataRequest().then((response) => {
+  const onSubmit = async () => {
+    try {
+      const response = await personDataRequest();
       console.log(response.info);
-    });
+    } catch (error) {
+      console.error("Error fetching person data:", error);
+    }
   };
 
   return (
@@ -97,7 +75,7 @@ export default function Home() {
                 options={pessoasList ?? []}
                 setOpen={setOpenAutocomplete}
                 open={openAutocomplete}
-                loading={loading}
+                loading={loadingPessoas}
               />
             </Box>
             <Button variant="contained" type="submit">
