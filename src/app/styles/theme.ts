@@ -13,7 +13,6 @@ let theme = createTheme({
     },
     text: {
       primary: "#212427",
-      secondary: "#fff",
     },
   },
 });
