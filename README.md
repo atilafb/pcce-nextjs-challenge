@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Form customization (PCCE React Challenge)
 
-## Getting Started
+This project was build using Next.js bootstrapped with [`create-next-app`].
+The purpose of this project was to create simple form adapting the component Autocomplete Load on Open from MaterialUI using it along with React-Hook-Form.
+In this project was used the library json-server, to simulate endpoints to populate the component and it's return, and Zod to validate the schema form.
 
-First, run the development server:
+## Dependencies
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+Node 20.11.0 LTS
+React 18
+```
+
+## Installing
+
+1. Clone the project
+
+```console
+$ git clone git@github.com:atilafb/pcce-nextjs-challenge.git
+$ cd pcce-nextjs-challenge
+```
+
+2. Install the dependencies and run the project 
+
+```console
+$ npm install
+$ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. After installing all dependencies of the project, it's necessary to simulate the data used to renderize the list displayed inside the component as well as the return data from it. Open another terminal and run this command
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```console
+$ npx json-server --watch data/db.json --port 8000
+```
